@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Currency Converter</title>
+  <link rel="stylesheet" href="style.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+
+<body>
+  <div class="container">
+    <h1>Currency Converter</h1>
+
+    <form id="converter-form" onsubmit="return false">
+      <label for="amount">Enter Amount</label>
+      <input type="number" id="amount" required placeholder="Enter amount" />
+
+      <div class="dropdowns">
+        <div class="select-box">
+          <label>From</label>
+          <div class="custom-select">
+            <img id="from-flag" src="https://flagsapi.com/US/flat/32.png" alt="Flag" />
+            <select id="from-currency"></select>
+          </div>
+        </div>
+
+        <div class="select-box">
+          <label>To</label>
+          <div class="custom-select">
+            <img id="to-flag" src="https://flagsapi.com/PK/flat/32.png" alt="Flag" />
+            <select id="to-currency"></select>
+          </div>
+        </div>
+      </div>
+
+      <p id="exchange-rate">1 USD = 397 PKR</p>
+      <button type="button" id="get-rate">Get Exchange Rate</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
