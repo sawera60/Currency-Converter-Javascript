@@ -1,3 +1,4 @@
+
 const fromCurrency = document.getElementById("from-currency");
 const toCurrency = document.getElementById("to-currency");
 const exchangeRate = document.getElementById("exchange-rate");
@@ -14,14 +15,28 @@ const countryList = {
   AUD: "AU",
   CNY: "CN",
   JPY: "JP",
+  NZD: "NZ", // New Zealand Dollar
+  CHF: "CH", // Swiss Franc
+  SGD: "SG", // Singapore Dollar
+  HKD: "HK", // Hong Kong Dollar
+  KRW: "KR", // South Korean Won
+  ZAR: "ZA", // South African Rand
+  BRL: "BR", // Brazilian Real
+  RUB: "RU", // Russian Ruble
+  SEK: "SE", // Swedish Krona
+  NOK: "NO", // Norwegian Krone
+  MXN: "MX", // Mexican Peso
+  AED: "AE", // UAE Dirham
+  SAR: "SA", // Saudi Riyal
+  TRY: "TR", // Turkish Lira
 };
 
-// 🪣 Populate dropdowns
+// Add currencies to dropdowns dynamically
 for (let currency in countryList) {
   const option1 = document.createElement("option");
   const option2 = document.createElement("option");
 
-  option1.value = option2.value = currency;  //inserting the value and text in options that we dynamically creted 
+  option1.value = option2.value = currency;
   option1.text = option2.text = currency;
 
   fromCurrency.appendChild(option1);
@@ -32,6 +47,7 @@ for (let currency in countryList) {
 fromCurrency.value = "USD";
 toCurrency.value = "PKR";
 
+// Update flags function
 function updateFlag(selectId, imgId) {
   const select = document.getElementById(selectId);
   const img = document.getElementById(imgId);
@@ -40,22 +56,31 @@ function updateFlag(selectId, imgId) {
   img.src = `https://flagsapi.com/${countryCode}/flat/32.png`;
 }
 
-// Update flags when dropdowns change
 fromCurrency.addEventListener("change", () => updateFlag("from-currency", "from-flag"));
 toCurrency.addEventListener("change", () => updateFlag("to-currency", "to-flag"));
 
-// Fetch exchange rate
+// --- Fetch Exchange Rate
 async function getCurrencyRate() {
-  const api_url = `https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_lAfJZMxfT22tmN0s9IELAUaYWmVod2XYhbkqHZ8v&base_currency=${fromCurrency.value}`;
+  const api_key = "d76f53a2e20e3e3698a2d187";
+  const api_url = `https://v6.exchangerate-api.com/v6/${api_key}/latest/${fromCurrency.value}`;
 
-  const response = await fetch(api_url);
-  const data = await response.json();
+  try {
+    const response = await fetch(api_url);
+    const data = await response.json();
 
-  const rate = data.data[toCurrency.value];
-  const amount = amountInput.value || 1; 
+    if (data.result !== "success") {
+      throw new Error("API request failed");
+    }
 
-  exchangeRate.innerText = `${amount} ${fromCurrency.value} = ${(amount * rate).toFixed(2)} ${toCurrency.value}`;
+    const rate = data.conversion_rates[toCurrency.value];
+    const amount = amountInput.value || 1;
+
+    exchangeRate.innerText = `${amount} ${fromCurrency.value} = ${(amount * rate).toFixed(2)} ${toCurrency.value}`;
+  } catch (error) {
+    exchangeRate.innerText = "Error fetching exchange rate!";
+    console.error("Error:", error);
+  }
 }
 
-// Click to get exchange rate
 getExchangeRate.addEventListener("click", getCurrencyRate);
+
